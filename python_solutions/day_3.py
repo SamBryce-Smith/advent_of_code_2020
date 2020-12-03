@@ -291,5 +291,64 @@ def get_index_tuple_list(init_row_index = 0, init_col_index = 0, row_jump = 1, c
 p1_index_tuple_list = get_index_tuple_list()
 print(p1_index_tuple_list)
 
+#part 1
+pt1_result = sum((cp_nested_data[idx_tuple[0]][idx_tuple[1]] for idx_tuple in p1_index_tuple_list))
 
-print(sum((cp_nested_data[idx_tuple[0]][idx_tuple[1]] for idx_tuple in p1_index_tuple_list)))
+print("this is result for part 1: {}".format(pt1_result))
+
+
+## part two
+'''
+Determine the number of trees you would encounter if, for each of the following slopes, you start at the top-left corner and traverse the map all the way to the bottom:
+
+Right 1, down 1.
+Right 3, down 1. (This is the slope you already checked.)
+Right 5, down 1.
+Right 7, down 1.
+Right 1, down 2.
+
+What do you get if you multiply together the number of trees encountered on each of the listed slopes?
+'''
+
+# workflow should be:
+#1. n_copies_list
+#2. copied_list
+#3. index_tuple_list
+#4. Sum result
+
+def n_trees_wrapper(list_of_lists, init_row_index = 0, init_col_index = 0, row_jump = 1, col_jump = 3, row_length = 31, list_length = 323):
+    '''
+    returns integer of n trees encountered
+    '''
+
+    n_cp_list = get_n_copies_list(init_row_index, init_col_index, row_jump, col_jump, row_length, list_length)
+
+    cp_l_o_l = list(map(duplicate_pattern, list_of_lists, n_cp_list))
+
+    idx_tup_list = get_index_tuple_list(init_row_index, init_col_index, row_jump, col_jump, list_length)
+
+    n_trees = sum((cp_l_o_l[idx_tuple[0]][idx_tuple[1]] for idx_tuple in idx_tup_list))
+
+    return n_trees
+
+
+# Right 1, down 1.
+# Right 3, down 1. (This is the slope you already checked.)
+# Right 5, down 1.
+# Right 7, down 1.
+# Right 1, down 2.
+
+r1_d1 = n_trees_wrapper(nested_data, init_row_index = 0, init_col_index = 0, row_jump = 1, col_jump = 1)
+r3_d1 = n_trees_wrapper(nested_data)
+r5_d1 = n_trees_wrapper(nested_data, init_row_index = 0, init_col_index = 0, row_jump = 1, col_jump = 5)
+r7_d1 = n_trees_wrapper(nested_data, init_row_index = 0, init_col_index = 0, row_jump = 1, col_jump = 7)
+r1_d2 = n_trees_wrapper(nested_data, init_row_index = 0, init_col_index = 0, row_jump = 2, col_jump = 1)
+
+if r3_d1 == pt1_result:
+    print("all is well with wrapper")
+else:
+    raise Exception("wrapper is going wrong")
+
+#multiply together to get pt2 resut
+pt2_result = r1_d1 * r3_d1 * r5_d1 * r7_d1 * r1_d2
+print("this is pt2 result: {}".format(pt2_result))
